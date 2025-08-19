@@ -1,50 +1,22 @@
-'use client';
-import Image from 'next/image'
-import { useKeenSlider } from 'keen-slider/react'
-import { HomeContainer, Product } from "../styles/pages/home"
-
-import camiseta1 from '../assets/products/1.png'
-import camiseta2 from '../assets/products/2.png'
-import camiseta3 from '../assets/products/3.png'
-
+import { stripe } from "../lib/stripe"
+import Stripe from "stripe"
 import 'keen-slider/keen-slider.min.css'
+import { SliderHome } from './SliderHome'
 
-export default function Home() {
-  const [sliderRef] = useKeenSlider({
-    slides: {
-      perView: 3,
-      spacing: 48
-    }
+export default async function Home() {
+  const response = await stripe.products.list({
+    expand: ['data.default_price'],
   });
 
-  return (
-    <HomeContainer ref={sliderRef} className="keen-slider">
-      <Product className="keen-slider__slide">
-        <Image src={camiseta1} width={520} height={480} alt="" />
+  const products = response.data.map(product => {
+    const price = product.default_price as Stripe.Price;
+    return {
+      id: product.id,
+      name: product.name,
+      imageUrl: product.images[0],
+      price: (price.unit_amount ?? 0) / 100,
+    }
+  })
 
-        <footer>
-          <strong>Camiseta X</strong>
-          <span>R$ 79,90</span>
-        </footer>
-      </Product>
-
-      <Product className="keen-slider__slide">
-        <Image src={camiseta2} width={520} height={480} alt="" />
-
-        <footer>
-          <strong>Camiseta X</strong>
-          <span>R$ 79,90</span>
-        </footer>
-      </Product>
-
-      <Product className="keen-slider__slide">
-        <Image src={camiseta3} width={520} height={480} alt="" />
-
-        <footer>
-          <strong>Camiseta X</strong>
-          <span>R$ 79,90</span>
-        </footer>
-      </Product>
-    </HomeContainer>
-  );
+  return <SliderHome products={products} />
 }
