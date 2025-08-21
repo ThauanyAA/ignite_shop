@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import { useKeenSlider } from 'keen-slider/react'
 import { HomeContainer, Product } from "../styles/pages/home"
+import Link from 'next/link'
 
 interface ProductItem {
   id: string
@@ -25,13 +26,15 @@ export function SliderHome({ products }: Props) {
   return (
     <HomeContainer ref={sliderRef} className="keen-slider">
       {products.map(product => (
-        <Product key={product.id} className="keen-slider__slide">
-          <Image src={product.imageUrl} width={520} height={480} alt="" />
-          <footer>
-            <strong>{product.name}</strong>
-            <span>R$ {product.price.toFixed(2)}</span>
-          </footer>
-        </Product>
+        <Link href={`/product/${product.id}`} key={product.id}>
+          <Product key={product.id} className="keen-slider__slide">
+            <Image src={product.imageUrl} width={520} height={480} alt="" />
+            <footer>
+              <strong>{product.name}</strong>
+              <span>R$ {product.price.toFixed(2)}</span>
+            </footer>
+          </Product>
+        </Link>
       ))}
     </HomeContainer>
   );
