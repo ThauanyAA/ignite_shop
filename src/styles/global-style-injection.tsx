@@ -1,11 +1,12 @@
 import { getCssText } from '.'
-import React from 'react'
 
 export function GlobalStyleInjection() {
   return (
     <style
       id="stitches"
+      suppressHydrationWarning
       dangerouslySetInnerHTML={{ __html: getCssText() }}
     />
   )
 }
+
