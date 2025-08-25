@@ -3,18 +3,14 @@ import { stripe } from "@/lib/stripe";
 import { ImageContainer, ProductContainer, ProductDetails } from "@/styles/pages/product";
 import Image from "next/image";
 
-interface ProductPageProps {
-  params: { id: string }
-}
-
-export const revalidate = 60 * 60 * 1 // 1 hora
+export const revalidate = 3600 // 1 hora
 
 export async function generateStaticParams() {
   const response = await stripe.products.list()
   return response.data.map((product) => ({ id: product.id }))
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage({ params }: { params: { id: string } }) {
   const productId = params.id;
 
   const response = await stripe.products.retrieve(productId, {
