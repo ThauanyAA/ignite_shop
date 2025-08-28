@@ -15,6 +15,7 @@ export default async function Home() {
       name: product.name,
       imageUrl: product.images[0],
       price: (price.unit_amount ?? 0) / 100,
+      defaultPriceId: price.id,
     }
   })
 

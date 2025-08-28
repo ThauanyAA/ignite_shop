@@ -4,12 +4,16 @@ import { useKeenSlider } from 'keen-slider/react'
 import { HomeContainer, Product } from "../styles/pages/home"
 import Link from 'next/link'
 import Head from 'next/head'
+import { ShoppingBag } from 'lucide-react'
+import { CartButton } from '@/styles/components/cart'
+import { useCart } from '@/app/(store)/useCart'
 
 interface ProductItem {
   id: string
   name: string
   imageUrl: string
   price: number
+  defaultPriceId: string
 }
 
 interface Props {
@@ -24,6 +28,8 @@ export function SliderHome({ products }: Props) {
     }
   });
 
+  const add = useCart(s => s.add)
+
   return (
     <>
       <Head>
@@ -31,15 +37,23 @@ export function SliderHome({ products }: Props) {
       </Head>
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map(product => (
-          <Link href={`/product/${product.id}`} key={product.id} prefetch={false}>
-            <Product key={product.id} className="keen-slider__slide">
+          <Product key={product.id} className="keen-slider__slide">
+            <Link href={`/product/${product.id}`} prefetch={false}>
               <Image src={product.imageUrl} width={520} height={480} alt="" />
-              <footer>
+            </Link>
+            <footer>
+              <div>
                 <strong>{product.name}</strong>
                 <span>R$ {product.price.toFixed(2)}</span>
-              </footer>
-            </Product>
-          </Link>
+              </div>
+              <CartButton
+                aria-label="Adicionar ao carrinho"
+                onClick={() => add(product, 1)}
+              >
+                <ShoppingBag />
+              </CartButton>
+            </footer>
+          </Product>
         ))}
       </HomeContainer>
     </>

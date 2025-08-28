@@ -1,42 +1,23 @@
 'use client'
 
+import { useCart } from "@/app/(store)/useCart";
 import { ImageContainer, ProductContainer, ProductDetails } from "@/styles/pages/product";
-import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
 
 interface ProductProps {
   product: {
     id: string
     name: string
     imageUrl: string
-    price: string
-    description: string | null
+    price: number
+    description: string
     defaultPriceId: string
   }
 }
 
 export default function ProductClient({ product }: ProductProps) {
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false);
-
-  async function handleBuyButton() {
-    try {
-      setIsCreatingCheckoutSession(true);
-
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId,
-      })
-
-      const { checkoutUrl } = response.data;
-
-      window.location.href = checkoutUrl;
-    } catch (err) {
-      setIsCreatingCheckoutSession(false);
-
-      alert('Falha ao redirecionar ao checkout!')
-    }
-  }
+  const add = useCart(s => s.add)
 
   return (
     <>
@@ -54,8 +35,8 @@ export default function ProductClient({ product }: ProductProps) {
 
           <p>{product.description}</p>
 
-          <button disabled={isCreatingCheckoutSession} onClick={handleBuyButton}>
-            Comprar agora
+          <button onClick={() => add(product, 1)}>
+            Colocar na sacola
           </button>
         </ProductDetails>
       </ProductContainer>

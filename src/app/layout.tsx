@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import { globalStyles } from '@/styles/global'
 import { GlobalStyleInjection } from '@/styles/global-style-injection';
-import { Container, Header } from '@/styles/pages/app';
-import Image from 'next/image'
-import logoImg from "../assets/logo.svg"
+import { Container } from '@/styles/pages/app';
+import { Header } from '@/components/Header';
 
 globalStyles()
 
@@ -24,9 +23,7 @@ export default function RootLayout({
       </head>
       <body>
         <Container>
-          <Header>
-            <Image src={logoImg} alt="" />
-          </Header>
+          <Header />
           {children}
         </Container>
       </body>
