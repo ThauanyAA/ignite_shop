@@ -31,7 +31,12 @@ export default function ProductClient({ product }: ProductProps) {
 
         <ProductDetails>
           <h1>{product.name}</h1>
-          <span>{product.price}</span>
+          <span>
+            {(product.price).toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            })}
+          </span>
 
           <p>{product.description}</p>
 
