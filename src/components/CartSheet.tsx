@@ -11,6 +11,7 @@ export function CartSheet() {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false);
   const { items, subtotal, remove, dec, add, count } = useCart()
   const countItems = count()
+  const total = subtotal()
 
   async function handleCheckout() {
     if (!items.length) return
@@ -55,7 +56,12 @@ export function CartSheet() {
                   <Image src={it.imageUrl} width={94} height={94} alt="" />
                   <div>
                     <strong>{it.name}</strong>
-                    <span>R$ {it.price}</span>
+                    <span>
+                      {(it.price).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
+                    </span>
                     <div className="controls">
                       <QtyRow>
                         <IconBtn
@@ -95,7 +101,12 @@ export function CartSheet() {
 
               <div className="row total">
                 <strong>Valor total</strong>
-                <strong>{subtotal()}</strong>
+                <strong>
+                  {(total).toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
+                </strong>
               </div>
             </div>
 
