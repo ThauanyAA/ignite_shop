@@ -100,7 +100,7 @@ export function CartSheet() {
             </div>
 
             <button
-              className="cta"
+              className="checkout"
               disabled={!items.length || isCreatingCheckoutSession}
               onClick={handleCheckout}
             >
